@@ -10,10 +10,10 @@
 */
 namespace ConsoleRenderer
 {
-    int nScreenBufferIndex = 0; // 콘솔창이 가르키는 인덱스
+    HANDLE hConsoleHandle;      // 초기 화면 콘솔의 핸들
+    CONSOLE_SCREEN_BUFFER_INFO Info; // 초기 화면 콘솔의 화면 정보
+    int nScreenBufferIndex = 0; // 콘솔창이 사용할 스크린버퍼의 인덱스
     HANDLE hScreenBuffer[2];
-    CONSOLE_SCREEN_BUFFER_INFO Info;
-    HANDLE hConsoleHandle;
 
     HANDLE GetCurrentScreenBufferHandle()
     {      
@@ -41,7 +41,9 @@ namespace ConsoleRenderer
 
     void ScreenFlipping()
     {
+        // 실제 콘솔이 사용할 스크린버퍼의 Handle을 설정하여 화면에 보여준다.
         SetConsoleActiveScreenBuffer(GetCurrentScreenBufferHandle());
+        // 다음에 사용할 스크린 버퍼의 인덱스를 증가시켜 준비한다.
         nScreenBufferIndex++;
         nScreenBufferIndex = nScreenBufferIndex % 2;  // 0,1,0,1,0,1,0,1....
     }
