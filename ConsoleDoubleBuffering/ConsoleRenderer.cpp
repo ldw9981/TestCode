@@ -10,15 +10,14 @@
 */
 namespace ConsoleRenderer
 {
-    bool bScreenBufferIndex = false; // 0
+    int nScreenBufferIndex = 0; // 콘솔창이 가르키는 인덱스
     HANDLE hScreenBuffer[2];
     CONSOLE_SCREEN_BUFFER_INFO Info;
     HANDLE hConsoleHandle;
 
     HANDLE GetScreenBufferHandle()
-    {
-        int index = (bScreenBufferIndex ? 1 : 0);
-        return hScreenBuffer[index];
+    {      
+        return hScreenBuffer[nScreenBufferIndex];
     }
 
     void ScreenInit()
@@ -43,7 +42,8 @@ namespace ConsoleRenderer
     void ScreenFlipping()
     {
         SetConsoleActiveScreenBuffer(GetScreenBufferHandle());
-        bScreenBufferIndex = !bScreenBufferIndex;  // 0->1 , 1->0
+        nScreenBufferIndex++;
+        nScreenBufferIndex = nScreenBufferIndex % 2;  // 0,1,0,1,0,1,0,1....
     }
 
     void ScreenClear()
