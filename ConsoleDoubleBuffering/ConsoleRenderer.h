@@ -1,10 +1,7 @@
 #pragma once
-
-#include <Windows.h>
-
 namespace ConsoleRenderer
 {
-	void InitScreen();
+	void ScreenInit();
 	void ScreenRelease();
 
 	void ScreenFlipping();
