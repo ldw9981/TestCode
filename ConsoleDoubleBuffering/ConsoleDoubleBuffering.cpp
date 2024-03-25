@@ -16,7 +16,7 @@
 bool g_bQuit = false;
 void Update();
 void Render();
-void ProcessInput(char key);
+void ProcessInput();
 
 COORD g_Player = {0,0};
 
@@ -28,7 +28,7 @@ int main()
    {
 	   if (_kbhit())
 	   {
-		   ProcessInput((char)_getch());
+		   ProcessInput();
 	   }
 	   Update();
 	   Render();
@@ -38,8 +38,9 @@ int main()
 }
 
 
-void ProcessInput(char key)
+void ProcessInput()
 {
+	char key = (char)_getch();
 	switch (key)
 	{
 	case ARROW_LEFT:
@@ -61,15 +62,17 @@ void ProcessInput(char key)
 
 void Update()
 {
-
+	if (g_Player.X < 0) g_Player.X = 0;
+	if (g_Player.X >= ConsoleRenderer::ScreenWidth()) g_Player.X = ConsoleRenderer::ScreenWidth() - 1;
+	if (g_Player.Y < 0) g_Player.Y = 0;
+	if (g_Player.Y >= ConsoleRenderer::ScreenHeight()) g_Player.Y = ConsoleRenderer::ScreenHeight() - 1;
 }
 
 void Render()
 {
-	char test[]="dsdsdsd";
 	ConsoleRenderer::ScreenClear();
-	ConsoleRenderer::ScreenSetChar(g_Player.X, g_Player.Y+10,'1',10,10);
-	ConsoleRenderer::ScreenSetString(g_Player.X, g_Player.Y, test, 10, 10);
+	ConsoleRenderer::ScreenSetString(0,0, "Hello 안녕", FG_PINK_DARK);
+	ConsoleRenderer::ScreenSetChar(g_Player.X, g_Player.Y, 'P', FG_WHITE);
 	ConsoleRenderer::ScreenFlipping();
 }
 
