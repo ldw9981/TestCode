@@ -66,8 +66,10 @@ void Update()
 
 void Render()
 {
+	char test[]="dsdsdsd";
 	ConsoleRenderer::ScreenClear();
-	ConsoleRenderer::ScreenDraw(g_Player.X, g_Player.Y,'1');
+	ConsoleRenderer::ScreenSetChar(g_Player.X, g_Player.Y+10,'1',10,10);
+	ConsoleRenderer::ScreenSetString(g_Player.X, g_Player.Y, test, 10, 10);
 	ConsoleRenderer::ScreenFlipping();
 }
 

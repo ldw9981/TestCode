@@ -1,6 +1,6 @@
 #include "ConsoleRenderer.h"
 #include <stdio.h>
-#include <Windows.h>
+
 
 /*
     
@@ -15,7 +15,7 @@ namespace ConsoleRenderer
     CONSOLE_SCREEN_BUFFER_INFO Info;
     HANDLE hConsoleHandle;
 
-    HANDLE GetScreenBufferHandle()
+    HANDLE GetCurrentScreenBufferHandle()
     {      
         return hScreenBuffer[nScreenBufferIndex];
     }
@@ -41,7 +41,7 @@ namespace ConsoleRenderer
 
     void ScreenFlipping()
     {
-        SetConsoleActiveScreenBuffer(GetScreenBufferHandle());
+        SetConsoleActiveScreenBuffer(GetCurrentScreenBufferHandle());
         nScreenBufferIndex++;
         nScreenBufferIndex = nScreenBufferIndex % 2;  // 0,1,0,1,0,1,0,1....
     }
@@ -50,7 +50,7 @@ namespace ConsoleRenderer
     {
         COORD Coor = { 0, 0 };
         DWORD dw;
-        FillConsoleOutputCharacter(GetScreenBufferHandle(), ' ', Info.dwSize.X * Info.dwSize.Y, Coor, &dw);
+        FillConsoleOutputCharacter(GetCurrentScreenBufferHandle(), ' ', Info.dwSize.X * Info.dwSize.Y, Coor, &dw);
     }
 
     void ScreenRelease()
@@ -59,24 +59,93 @@ namespace ConsoleRenderer
         CloseHandle(hScreenBuffer[1]);
     }
    
-    void ScreenDraw(int x, int y, const char c)
-    {
-        DWORD dw;
-        COORD Cur = { (SHORT)x, (SHORT)y };
-        char buffer[10];
-        sprintf_s(buffer, "%c", c);
+    
 
-        SetConsoleCursorPosition(GetScreenBufferHandle(), Cur);
-        WriteFile(GetScreenBufferHandle(), buffer, 1, &dw, NULL);
+
+    /*
+        FOREGROUND_BLUE	텍스트 색에 파란색이 포함됩니다.
+        COMMON_LVB_LEADING_BYTE	선행 바이트입니다.
+
+        https://learn.microsoft.com/ko-kr/windows/console/console-screen-buffers#character-attributes
+    */
+
+
+    bool ScreenSetChar(int x, int y, char ch, WORD bg, WORD fg)
+    {
+        COORD	cdPos;
+        BOOL	bRval = FALSE;
+        DWORD	dwCharsWritten;
+        cdPos.X = x;
+        cdPos.Y = y;
+
+        bRval = FillConsoleOutputCharacter(GetCurrentScreenBufferHandle(), ch, 1, cdPos, &dwCharsWritten);
+        if (bRval == false) printf("Error, FillConsoleOutputCharacter()\n");
+
+        bRval = FillConsoleOutputAttribute(GetCurrentScreenBufferHandle(), bg | fg, 1, cdPos, &dwCharsWritten);
+        if (bRval == false) printf("Error, FillConsoleOutputAttribute()\n");
+        return bRval;
     }
 
-    void ScreenDraw(int x, int y, const char* pStr)
+    bool ScreenSetChar2B(int x, int y, char ch[2], WORD bg, WORD fg)
     {
-        DWORD dw;
-        COORD Cur = { (SHORT) x,(SHORT)y };
-        SetConsoleCursorPosition(GetScreenBufferHandle(), Cur);
-        WriteFile(GetScreenBufferHandle(), pStr, strlen(pStr), &dw, NULL);
+        COORD	cdPos;
+        bool	bRval = FALSE;
+        DWORD	dwCharsWritten;
+        cdPos.X = x;
+        cdPos.Y = y;
+
+        bRval = SetConsoleCursorPosition(GetCurrentScreenBufferHandle(), cdPos);
+        if (!bRval)
+            return false;
+
+        printf("%c%c", ch[0], ch[1]);
+
+        cdPos.X = x;
+        cdPos.Y = y;
+        bRval = FillConsoleOutputAttribute(GetCurrentScreenBufferHandle(), bg | fg, 2, cdPos, &dwCharsWritten);
+        if (bRval == false)
+            printf("Error, FillConsoleOutputAttribute()\n");
+
+        return bRval;
     }
+
+    bool ScreenSetString(int x, int y, char* pStr, WORD bg, WORD fg)
+    {
+        COORD	cdPos;
+        BOOL	bRval = FALSE;
+        DWORD	dwCharsWritten;
+        cdPos.X = x;
+        cdPos.Y = y;
+
+        DWORD nNumberOfBytesToWrite = strlen(pStr);
+
+        SetConsoleCursorPosition(GetCurrentScreenBufferHandle(), cdPos);
+        WriteFile(GetCurrentScreenBufferHandle(), pStr, nNumberOfBytesToWrite, &dwCharsWritten, NULL);
+
+        bRval = FillConsoleOutputAttribute(GetCurrentScreenBufferHandle(), bg | fg, nNumberOfBytesToWrite, cdPos, &dwCharsWritten);
+        if (bRval == false) printf("Error, FillConsoleOutputAttribute()\n");
+        return bRval;
+    }
+
+    bool ScreenSetAttr( WORD bg, WORD fg)
+    {
+        COORD	cdPos;
+        bool	bRval = FALSE;
+        DWORD	dwCharsWritten;
+        //	int x,y;	
+
+        cdPos.X = 0;
+        cdPos.Y = 0;
+        bRval = FillConsoleOutputAttribute(GetCurrentScreenBufferHandle(), bg | fg, Info.dwSize.X * Info.dwSize.Y, cdPos, &dwCharsWritten);
+        if (bRval == false)
+        {
+            printf("Error, FillConsoleOutputCharacter()\n");
+            return bRval;
+        }
+
+        return bRval;
+    }
+
 
     int ScreenWidth()
     {
