@@ -21,29 +21,22 @@ namespace ConsoleRenderer
         return hScreenBuffer[index];
     }
 
-    void GotoXY(int x, int y)
-    {
-        COORD Cur = { x, y };
-
-        SetConsoleCursorPosition(hConsoleHandle, Cur);
-    }
-
     void ScreenInit()
     {
-        // 화면 버퍼 2개를 만든다.
-        bool bRval;
+        // 현재 화면크기에 맞는 화면 콘솔스크린버퍼 2개를 만든다.    
         hConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
         hScreenBuffer[0] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
         hScreenBuffer[1] = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL);
-        
-        
+                
+        // 기본 콘솔,생성된 콘솔스크린 모두 커서 안보이게 설정
         CONSOLE_CURSOR_INFO cursorInfo = { 0, };
-        cursorInfo.bVisible = FALSE; // 커서를 보일지 말지 결정(0이면 안보임, 0제외 숫자 값이면 보임)
+        cursorInfo.bVisible = FALSE; 
         cursorInfo.dwSize = 1; // 커서의 크기를 결정 (1~100 사이만 가능)
-        bRval = SetConsoleCursorInfo(hConsoleHandle, &cursorInfo);
-        if (bRval == FALSE)
-            printf("Error, SetConsoleCursorInfo()\n");
+        SetConsoleCursorInfo(hConsoleHandle, &cursorInfo);     
+        SetConsoleCursorInfo(hScreenBuffer[0], &cursorInfo);   
+        SetConsoleCursorInfo(hScreenBuffer[1], &cursorInfo);   
 
+        //기본 콘솔의 화면 크기 정보를 얻는다.
         GetConsoleScreenBufferInfo(hConsoleHandle, &Info);
     }
 
@@ -69,7 +62,7 @@ namespace ConsoleRenderer
     void ScreenDraw(int x, int y, const char c)
     {
         DWORD dw;
-        COORD Cur = { x, y };
+        COORD Cur = { (SHORT)x, (SHORT)y };
         char buffer[10];
         sprintf_s(buffer, "%c", c);
 
@@ -80,9 +73,18 @@ namespace ConsoleRenderer
     void ScreenDraw(int x, int y, const char* pStr)
     {
         DWORD dw;
-        COORD Cur = { x, y };
+        COORD Cur = { (SHORT) x,(SHORT)y };
         SetConsoleCursorPosition(GetScreenBufferHandle(), Cur);
         WriteFile(GetScreenBufferHandle(), pStr, strlen(pStr), &dw, NULL);
+    }
+
+    int ScreenWidth()
+    {
+        return Info.dwSize.X;
+    }
+    int ScreenHeight()
+    {
+        return Info.dwSize.Y;
     }
 };
 
