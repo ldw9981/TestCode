@@ -18,28 +18,28 @@ void Update();
 void Render();
 void ProcessInput();
 
-COORD g_Player = {0,0};
+COORD g_Player = { 0,0 };
 
 int main()
 {
-   ConsoleRenderer::ScreenInit();
-      
-   while (!g_bQuit)
-   {
-	   if (_kbhit())
-	   {
-		   ProcessInput();
-	   }
-	   Update();
-	   Render();
-   };
+	ConsoleRenderer::ScreenInit();
 
-   ConsoleRenderer::ScreenRelease();
+	while (!g_bQuit)
+	{
+		ProcessInput();
+		Update();
+		Render();
+	};
+
+	ConsoleRenderer::ScreenRelease();
 }
 
 
 void ProcessInput()
 {
+	if(!_kbhit())
+		return;
+
 	char key = (char)_getch();
 	switch (key)
 	{
@@ -71,7 +71,7 @@ void Update()
 void Render()
 {
 	ConsoleRenderer::ScreenClear();
-	ConsoleRenderer::ScreenSetString(0,0, "Hello 안녕", FG_PINK_DARK);
+	ConsoleRenderer::ScreenSetString(0, 0, "Hello 안녕", FG_PINK_DARK);
 	ConsoleRenderer::ScreenSetChar(g_Player.X, g_Player.Y, 'P', FG_WHITE);
 	ConsoleRenderer::ScreenFlipping();
 }
