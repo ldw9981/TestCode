@@ -4,14 +4,8 @@
 #include <iostream>
 #include <Windows.h>
 #include <conio.h>
-
 #include "ConsoleRenderer.h"
 
-#define ARROW_UP	0x48
-#define ARROW_LEFT	0x4b
-#define ARROW_RIGHT	0x4d
-#define ARROW_DOWN	0x50
-#define KEY_SPACE	0x20
 
 bool g_bQuit = false;
 void Update();
@@ -37,27 +31,22 @@ int main()
 
 void ProcessInput()
 {
-	if(!_kbhit())
-		return;
-
-	char key = (char)_getch();
-	switch (key)
-	{
-	case ARROW_LEFT:
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000) { //왼쪽
 		g_Player.X--;
-		break;
-	case ARROW_RIGHT:
-		g_Player.X++;
-		break;
-	case ARROW_UP:
-		g_Player.Y--;
-		break;
-	case ARROW_DOWN:
-		g_Player.Y++;
-		break;
-	default:
-		break;
 	}
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) { //오른쪽
+		g_Player.X++;
+	}
+	if (GetAsyncKeyState(VK_UP) & 0x8000) { //위
+		g_Player.Y--;
+	}
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000) { //아래
+		g_Player.Y++;
+	}
+	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { //종료
+		g_bQuit = true;
+	}
+
 }
 
 void Update()
