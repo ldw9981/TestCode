@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CharCalculator", "CharCalcu
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleDoubleBuffering", "ConsoleDoubleBuffering\ConsoleDoubleBuffering.vcxproj", "{A9587121-B3BA-48B6-B307-3DB3FD5F3923}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CircularQueue", "CircularQueue\CircularQueue.vcxproj", "{62118CAE-1C98-4320-880A-7ED9B8B379DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{A9587121-B3BA-48B6-B307-3DB3FD5F3923}.Release|x64.Build.0 = Release|x64
 		{A9587121-B3BA-48B6-B307-3DB3FD5F3923}.Release|x86.ActiveCfg = Release|Win32
 		{A9587121-B3BA-48B6-B307-3DB3FD5F3923}.Release|x86.Build.0 = Release|Win32
+		{62118CAE-1C98-4320-880A-7ED9B8B379DF}.Debug|x64.ActiveCfg = Debug|x64
+		{62118CAE-1C98-4320-880A-7ED9B8B379DF}.Debug|x64.Build.0 = Debug|x64
+		{62118CAE-1C98-4320-880A-7ED9B8B379DF}.Debug|x86.ActiveCfg = Debug|Win32
+		{62118CAE-1C98-4320-880A-7ED9B8B379DF}.Debug|x86.Build.0 = Debug|Win32
+		{62118CAE-1C98-4320-880A-7ED9B8B379DF}.Release|x64.ActiveCfg = Release|x64
+		{62118CAE-1C98-4320-880A-7ED9B8B379DF}.Release|x64.Build.0 = Release|x64
+		{62118CAE-1C98-4320-880A-7ED9B8B379DF}.Release|x86.ActiveCfg = Release|Win32
+		{62118CAE-1C98-4320-880A-7ED9B8B379DF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
