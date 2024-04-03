@@ -4,72 +4,64 @@
 #include <iostream>
 #include <Windows.h>
 #include <conio.h>
-
 #include "ConsoleRenderer.h"
 
-#define ARROW_UP	0x48
-#define ARROW_LEFT	0x4b
-#define ARROW_RIGHT	0x4d
-#define ARROW_DOWN	0x50
-#define KEY_SPACE	0x20
 
 bool g_bQuit = false;
 void Update();
 void Render();
-void ProcessInput(char key);
+void ProcessInput();
 
-COORD g_Player = {0,0};
+COORD g_Player = { 0,0 };
 
 int main()
 {
-   ConsoleRenderer::ScreenInit();
-      
-   while (!g_bQuit)
-   {
-	   if (_kbhit())
-	   {
-		   ProcessInput((char)_getch());
-	   }
-	   Update();
-	   Render();
-   };
+	ConsoleRenderer::ScreenInit();
 
-   ConsoleRenderer::ScreenRelease();
+	while (!g_bQuit)
+	{
+		ProcessInput();
+		Update();
+		Render();
+	};
+
+	ConsoleRenderer::ScreenRelease();
 }
 
 
-void ProcessInput(char key)
+void ProcessInput()
 {
-	switch (key)
-	{
-	case ARROW_LEFT:
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000) { //왼쪽
 		g_Player.X--;
-		break;
-	case ARROW_RIGHT:
-		g_Player.X++;
-		break;
-	case ARROW_UP:
-		g_Player.Y--;
-		break;
-	case ARROW_DOWN:
-		g_Player.Y++;
-		break;
-	default:
-		break;
 	}
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) { //오른쪽
+		g_Player.X++;
+	}
+	if (GetAsyncKeyState(VK_UP) & 0x8000) { //위
+		g_Player.Y--;
+	}
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000) { //아래
+		g_Player.Y++;
+	}
+	if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) { //종료
+		g_bQuit = true;
+	}
+
 }
 
 void Update()
 {
-
+	if (g_Player.X < 0) g_Player.X = 0;
+	if (g_Player.X >= ConsoleRenderer::ScreenWidth()) g_Player.X = ConsoleRenderer::ScreenWidth() - 1;
+	if (g_Player.Y < 0) g_Player.Y = 0;
+	if (g_Player.Y >= ConsoleRenderer::ScreenHeight()) g_Player.Y = ConsoleRenderer::ScreenHeight() - 1;
 }
 
 void Render()
 {
-	char test[]="dsdsdsd";
 	ConsoleRenderer::ScreenClear();
-	ConsoleRenderer::ScreenSetChar(g_Player.X, g_Player.Y+10,'1',10,10);
-	ConsoleRenderer::ScreenSetString(g_Player.X, g_Player.Y, test, 10, 10);
+	ConsoleRenderer::ScreenSetString(0, 0, "Hello 안녕", FG_PINK_DARK);
+	ConsoleRenderer::ScreenSetChar(g_Player.X, g_Player.Y, 'P', FG_WHITE);
 	ConsoleRenderer::ScreenFlipping();
 }
 
