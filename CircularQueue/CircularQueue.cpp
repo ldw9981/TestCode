@@ -8,6 +8,12 @@
 using namespace std;
 #define MAX_QUEUE_SIZE 30
 
+#define MAX_COMMAND_COUNT 5
+int g_CommandKeys[MAX_COMMAND_COUNT] = { VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_RETURN };
+short g_CommandKeysStatePrev[MAX_COMMAND_COUNT] = { 0,0,0,0,0 };
+short g_CommandKeysStateCurr[MAX_COMMAND_COUNT] = { 0,0,0,0,0 };
+char g_CommandKeysChar[MAX_COMMAND_COUNT] = { 'L','R','U','D','E' };
+
 bool g_Quit = false;
 struct Queue
 {
@@ -92,19 +98,28 @@ int main()
 	
 	short result=0,prev=0;
 
+		
+	BYTE Curr[256];		// 현재 키의 정보		
+
+
 	while (!g_Quit)
 	{
-		__MyKbdUpdate();
-
-		if( __MyKbdIsTurnDn(VK_ESCAPE) )
-			g_Quit = true;
-					
-		
-		if (__MyKbdIsCurrDn('A'))
-		{			
-			printf("SPACE\n");
+		for (i = 0; i < MAX_COMMAND_COUNT; i++)
+		{
+			g_CommandKeysStateCurr[i] = GetAsyncKeyState(g_CommandKeys[i]);
+			if (g_CommandKeysStatePrev[i] == 0 && g_CommandKeysStateCurr[i] != g_CommandKeysStatePrev[i])
+			{
+				if (g_CommandKeys[i] == VK_RETURN)
+				{
+					queue.PrintAll();
+				}
+				else
+				{
+					queue.Enqueue(g_CommandKeysChar[i] );
+				}
+			}
+			g_CommandKeysStatePrev[i] = g_CommandKeysStateCurr[i];
 		}
-
 	}
 
 	
