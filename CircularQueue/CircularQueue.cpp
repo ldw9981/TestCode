@@ -8,11 +8,11 @@
 using namespace std;
 #define MAX_QUEUE_SIZE 30
 
-#define MAX_COMMAND_COUNT 5
-int g_CommandKeys[MAX_COMMAND_COUNT] = { VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_RETURN };
-short g_CommandKeysStatePrev[MAX_COMMAND_COUNT] = { 0,0,0,0,0 };
-short g_CommandKeysStateCurr[MAX_COMMAND_COUNT] = { 0,0,0,0,0 };
-char g_CommandKeysChar[MAX_COMMAND_COUNT] = { 'L','R','U','D','E' };
+#define MAX_KEY_COUNT 5
+int g_CommandKeys[MAX_KEY_COUNT] = { VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_RETURN };
+short g_CommandKeysStatePrev[MAX_KEY_COUNT] = { 0,0,0,0,0 };
+short g_CommandKeysStateCurr[MAX_KEY_COUNT] = { 0,0,0,0,0 };
+char g_CommandKeysChar[MAX_KEY_COUNT] = { 'L','R','U','D','E'};
 
 bool g_Quit = false;
 struct Queue
@@ -86,6 +86,14 @@ struct Queue
 		}
 
 	}
+
+	void Clear()
+	{
+		count=0;
+		front = 0;	
+		rear = 0;
+		memset(buf,0,sizeof(char)* qsize);
+	}
 };
 
 
@@ -104,14 +112,16 @@ int main()
 
 	while (!g_Quit)
 	{
-		for (i = 0; i < MAX_COMMAND_COUNT; i++)
+		for (i = 0; i < MAX_KEY_COUNT; i++)
 		{
 			g_CommandKeysStateCurr[i] = GetAsyncKeyState(g_CommandKeys[i]);
 			if (g_CommandKeysStatePrev[i] == 0 && g_CommandKeysStateCurr[i] != g_CommandKeysStatePrev[i])
 			{
 				if (g_CommandKeys[i] == VK_RETURN)
 				{
+					system("cls");
 					queue.PrintAll();
+					queue.Clear();
 				}
 				else
 				{
