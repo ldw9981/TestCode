@@ -9,12 +9,13 @@ using namespace std;
 #define MAX_QUEUE_SIZE 30
 
 #define MAX_KEY_COUNT 5
-int g_CommandKeys[MAX_KEY_COUNT] = { VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_RETURN };
-short g_CommandKeysStatePrev[MAX_KEY_COUNT] = { 0,0,0,0,0 };
-short g_CommandKeysStateCurr[MAX_KEY_COUNT] = { 0,0,0,0,0 };
+int g_CommandVKey[MAX_KEY_COUNT] = { VK_LEFT,VK_RIGHT,VK_UP,VK_DOWN,VK_RETURN };
+short g_KeyStatePrev[MAX_KEY_COUNT] = { 0,0,0,0,0 };
+short g_KeyStateCurr[MAX_KEY_COUNT] = { 0,0,0,0,0 };
 char g_CommandKeysChar[MAX_KEY_COUNT] = { 'L','R','U','D','E'};
-
 bool g_Quit = false;
+
+
 struct Queue
 {
 	char buf[MAX_QUEUE_SIZE] = { 0 };		//저장소
@@ -84,16 +85,7 @@ struct Queue
 			temp_front++;
 			temp_front = temp_front % qsize;
 		}
-
-	}
-
-	void Clear()
-	{
-		count=0;
-		front = 0;	
-		rear = 0;
-		memset(buf,0,sizeof(char)* qsize);
-	}
+	}	
 };
 
 
@@ -101,39 +93,38 @@ struct Queue
 
 int main()
 {
-	int i = 0;
-	Queue queue;
-	
-	short result=0,prev=0;
-
-		
-	BYTE Curr[256];		// 현재 키의 정보		
-
-
+	ULONGLONG inputTickCount=0;	
+	Queue queue;	
 	while (!g_Quit)
 	{
-		for (i = 0; i < MAX_KEY_COUNT; i++)
-		{
-			g_CommandKeysStateCurr[i] = GetAsyncKeyState(g_CommandKeys[i]);
-			if (g_CommandKeysStatePrev[i] == 0 && g_CommandKeysStateCurr[i] != g_CommandKeysStatePrev[i])
+		for (int i = 0; i < MAX_KEY_COUNT; i++)
+		{	
+			g_KeyStateCurr[i] = GetAsyncKeyState(g_CommandVKey[i]); //  0이면 눌리지 않은 상태, 0이 아니면 눌린 상태
+			//키가 눌렸을때만 큐에 넣는다.
+			if (g_KeyStatePrev[i] == 0 && g_KeyStateCurr[i] != g_KeyStatePrev[i])
 			{
-				if (g_CommandKeys[i] == VK_RETURN)
+				inputTickCount = GetTickCount64();	// 마지막 입력시간을 기록한다.
+				if (!queue.IsFull())
 				{
-					system("cls");
-					queue.PrintAll();
-					queue.Clear();
+					queue.Enqueue(g_CommandKeysChar[i]);
 				}
 				else
 				{
-					queue.Enqueue(g_CommandKeysChar[i] );
-				}
+					queue.Dequeue();
+					queue.Enqueue(g_CommandKeysChar[i]);
+				}				
+				//Todo:  기술의 커맨드 목록과 일치하는게 있는지 확인하고 해당 기술의 이름을 출력한다. 
+				
 			}
-			g_CommandKeysStatePrev[i] = g_CommandKeysStateCurr[i];
+			g_KeyStatePrev[i] = g_KeyStateCurr[i];
+		}		
+		// 마지막 입력후 300ms 지나면 큐를 전체 초기화한다.
+		if (inputTickCount!=0 &&  GetTickCount64() - inputTickCount > 300)
+		{	
+			inputTickCount =  0;		
+			while (!queue.IsEmpty())
+				queue.Dequeue();
 		}
-	}
-
-	
-	cout << endl;
-	system("pause");
+	}	
 	return 0;
 }
