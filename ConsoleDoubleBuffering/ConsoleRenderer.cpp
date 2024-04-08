@@ -61,6 +61,7 @@ namespace ConsoleRenderer
         COORD Coor = { 0, 0 };
         DWORD dw;
         FillConsoleOutputCharacter(GetCurrentScreenBufferHandle(), ' ', nScreenBufferSize, Coor, &dw);
+        FillConsoleOutputAttribute(GetCurrentScreenBufferHandle(), 0 , nScreenBufferSize, Coor, &dw);
     }
 
     void ScreenRelease()
