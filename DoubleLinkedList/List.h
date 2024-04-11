@@ -8,8 +8,6 @@ public:
 		T data;
 		Node* pNext=nullptr;
 		Node* pPrev=nullptr;
-
-		
 	};
 
 	// 포인터를 구조체에 포함시켜서 순회를 도와준다.
@@ -62,19 +60,41 @@ public:
 		return pNewNode;
 	}
 
-	void Erase(Node* pNode)
+	Node* Erase(Node* pNode)
 	{
+		// Link 교체
+		Node* pNodeNext = pNode->pNext;
 		if (pNode->pPrev != nullptr)
 		{
-			pNode->pPrev->pNext = pNode->pNext;
+			pNode->pPrev->pNext = pNode->pNext;		
+			
 		}
-
 		if (pNode->pNext != nullptr)
 		{
 			pNode->pNext->pPrev = pNode->pPrev;
 		}
 
+		// Head,Tail 처리
+		if (pNode == m_pHead)
+		{
+			m_pHead = pNode->pNext;
+		} 
+		if (pNode == m_pTail)
+		{
+			m_pTail = pNode->pPrev;
+		}		
+
 		delete pNode;
+		return pNodeNext;
+	}
+
+	void Clear()
+	{
+		Node* pCurr = m_pHead;
+		while (pCurr != nullptr)
+		{
+			pCurr = Erase(pCurr);
+		}
 	}
 
 	Iterator Begin()

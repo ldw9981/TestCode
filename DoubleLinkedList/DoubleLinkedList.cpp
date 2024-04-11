@@ -10,12 +10,12 @@ int main()
     
     MyList.PushBack(10);
     List<int>::Node* node = MyList.PushBack(20);
-    MyList.PushBack(30);
-    MyList.PushBack(40);
+    //MyList.PushBack(30);
+    //MyList.PushBack(40);
 
 
-    MyList.Erase(node);
-
+    //MyList.Erase(node);
+    MyList.Clear();
 
     List<int>::Iterator iter = MyList.Begin();
     
@@ -25,6 +25,7 @@ int main()
     }
 
 
+    
     
 }
 
