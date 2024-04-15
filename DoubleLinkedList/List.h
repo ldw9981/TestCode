@@ -62,19 +62,17 @@ public:
 
 	Node* Erase(Node* pNode)
 	{
-		// Link 교체
-		Node* pNodeNext = pNode->pNext;
-		if (pNode->pPrev != nullptr)
+		if (pNode->pPrev != nullptr)	// 앞노드 포인터 처리
 		{
 			pNode->pPrev->pNext = pNode->pNext;		
 			
 		}
-		if (pNode->pNext != nullptr)
+		if (pNode->pNext != nullptr)	// 뒷노드 포인터 처리
 		{
 			pNode->pNext->pPrev = pNode->pPrev;
 		}
 
-		// Head,Tail 처리
+		// Head,Tail 변경
 		if (pNode == m_pHead)
 		{
 			m_pHead = pNode->pNext;
@@ -83,8 +81,8 @@ public:
 		{
 			m_pTail = pNode->pPrev;
 		}		
-
-		delete pNode;
+		Node* pNodeNext = pNode->pNext;	// 다음노드 리턴
+		delete pNode; // 해제
 		return pNodeNext;
 	}
 
