@@ -105,6 +105,15 @@ public:
 	{
 		return Iterator(nullptr);
 	}
-	
+	/*
+	RIterator RBegin()
+	{
+		return RIterator(m_pTail);   // ++ดย  pCurr = pCurr->pPrev;
+	}
+	RIterator REnd()
+	{
+		return RIterator(nullptr);
+	}
+	*/	
 };
 
