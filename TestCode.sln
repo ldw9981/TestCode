@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsDoubleBuffering", "W
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DoubleLinkedList", "DoubleLinkedList\DoubleLinkedList.vcxproj", "{4FCF587A-7ACA-4525-B886-C247A072A260}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SingleLinkedList", "SingleLinkedList\SingleLinkedList.vcxproj", "{527527FF-4E31-4BFD-9B98-C58BFFEC16D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{4FCF587A-7ACA-4525-B886-C247A072A260}.Release|x64.Build.0 = Release|x64
 		{4FCF587A-7ACA-4525-B886-C247A072A260}.Release|x86.ActiveCfg = Release|Win32
 		{4FCF587A-7ACA-4525-B886-C247A072A260}.Release|x86.Build.0 = Release|Win32
+		{527527FF-4E31-4BFD-9B98-C58BFFEC16D1}.Debug|x64.ActiveCfg = Debug|x64
+		{527527FF-4E31-4BFD-9B98-C58BFFEC16D1}.Debug|x64.Build.0 = Debug|x64
+		{527527FF-4E31-4BFD-9B98-C58BFFEC16D1}.Debug|x86.ActiveCfg = Debug|Win32
+		{527527FF-4E31-4BFD-9B98-C58BFFEC16D1}.Debug|x86.Build.0 = Debug|Win32
+		{527527FF-4E31-4BFD-9B98-C58BFFEC16D1}.Release|x64.ActiveCfg = Release|x64
+		{527527FF-4E31-4BFD-9B98-C58BFFEC16D1}.Release|x64.Build.0 = Release|x64
+		{527527FF-4E31-4BFD-9B98-C58BFFEC16D1}.Release|x86.ActiveCfg = Release|Win32
+		{527527FF-4E31-4BFD-9B98-C58BFFEC16D1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
