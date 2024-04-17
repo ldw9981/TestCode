@@ -58,36 +58,36 @@ public:
 
 	void PopFront()
 	{
-		if(m_pHead == nullptr)
-			return;
-
-		Node* pNext = m_pHead->pNext;
+		Erase(m_pHead);
 	}
+		
 
 	Node* Erase(Node* pNode)
 	{
-		if (pNode->pPrev != nullptr)	// 앞노드 포인터 처리
-		{
-			pNode->pPrev->pNext = pNode->pNext;
+		Node* pCurr = m_pHead;
+		Node* pNext = nullptr;
+		while (pCurr != nullptr)
+		{	
+			//다음노드가 삭제할 노드인지 확인
+			pNext = pCurr->pNext;
+			if(pNext != pNode)
+			{
+				pCurr = pNext;
+				continue;
+			}
 
+			if (pCurr == m_pHead)
+			{
+				m_pHead = pCurr->pNext;
+			}
+			else
+			{
+				pCurr->pNext = pNext->pNext;
+			}
+			delete pNode;
+			break;
 		}
-		if (pNode->pNext != nullptr)	// 뒷노드 포인터 처리
-		{
-			pNode->pNext->pPrev = pNode->pPrev;
-		}
-
-		// Head,Tail 변경
-		if (pNode == m_pHead)
-		{
-			m_pHead = pNode->pNext;
-		}
-		if (pNode == m_pTail)
-		{
-			m_pTail = pNode->pPrev;
-		}
-		Node* pNodeNext = pNode->pNext;	// 다음노드 리턴
-		delete pNode; // 해제
-		return pNodeNext;
+		return pNext;
 	}
 
 	void Clear()
@@ -95,7 +95,9 @@ public:
 		Node* pCurr = m_pHead;
 		while (pCurr != nullptr)
 		{
-			pCurr = Erase(pCurr);
+			Node* pNext = pCurr->pNext;
+			delete pCurr;
+			pCurr = pNext;
 		}
 	}
 
