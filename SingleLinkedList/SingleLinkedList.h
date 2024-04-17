@@ -61,6 +61,28 @@ public:
 		Erase(m_pHead);
 	}
 		
+	Node* Insert(Node* pNode, T data)
+	{
+		Node* pCurr = m_pHead;
+		Node* pNext = nullptr;
+		while (pCurr != nullptr)
+		{
+			//추가작업할 노드인지 확인
+			pNext = pCurr->pNext;
+			if (pCurr != pNode)
+			{
+				pCurr = pNext;
+				continue;
+			}
+		
+			Node* pNewNode = new Node;
+			pNewNode->data = data;	
+			pNewNode->pNext = pNext;
+			pCurr->pNext = pNewNode;	
+			break;
+		}
+		return pNext;
+	}
 
 	Node* Erase(Node* pNode)
 	{
